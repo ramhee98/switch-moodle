@@ -1,0 +1,5 @@
+# Ignore user-specific config
+config.ini
+
+# Ignore Python bytecode
+__pycache__/
