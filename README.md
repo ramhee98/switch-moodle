@@ -1,17 +1,19 @@
 # switch-moodle
 
 A simple Python script to switch between Moodle environments on a Debian-based web server.  
-This utility stops Apache, swaps Moodle directories, and restarts Apache wich is useful for quickly testing changes or rolling back to a previous version.
+This utility stops the webserver, swaps Moodle directories, and restarts the webserver which is useful for quickly testing changes or rolling back to a previous version.
 
 ---
 
 ## Directory Structure
 
-The script works within `/var/www/` and manages the following folders:
+The script works within the configured `base_path` and manages the following folders:
 
 - `moodle` – current active Moodle installation
 - `moodle_old` – a previous version
 - `moodle_new` – a temporary or alternate version
+
+These folder names and the base path are configurable via `config.ini`.
 
 ---
 
@@ -41,6 +43,32 @@ If neither exists, nothing is done.
 
 ---
 
+## Configuration
+
+Before the script runs, it expects a `config.ini` file in the project root directory. This file defines the base path and directory names used for switching Moodle installations.
+
+If `config.ini` does not exist, it will be automatically created from `config_template.ini`.
+
+### `config_template.ini` structure
+
+```ini
+[settings]
+
+# Base directory where all Moodle instances are located
+base_path = /var/www/
+
+# Name of the Moodle directory loaded by the webserver
+moodle = moodle
+
+# Name of the old Moodle directory (e.g. for backup or archive)
+moodle_old = moodle_old
+
+# Name of the new Moodle directory (e.g. for upgrade or migration)
+moodle_new = moodle_new
+```
+
+---
+
 ## Usage
 
 ```bash
@@ -48,6 +76,7 @@ git clone https://github.com/yourusername/switch-moodle.git
 cd switch-moodle
 sudo python3 switch_moodle.py
 ```
+The script will generate a config.ini file if missing. Edit it as needed.
 
 ---
 
