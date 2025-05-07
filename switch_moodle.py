@@ -22,10 +22,10 @@ def restart_webserver(action):
             webserver = "nginx"
 
         if not webserver:
-            print("No supported web server found (Apache/Nginx).")
+            print("No supported web server found (Apache/Nginx)")
             return
 
-        print(f"Attempting to {action} the {webserver} service.")
+        print(f"Attempting to {action} the {webserver} service")
         run_command(["systemctl", action, webserver])
 
 # Define config files with base path relative to script location
@@ -70,21 +70,20 @@ def run_command(cmd):
 
 try:
     if os.path.exists(moodle_old):
-        restart_webserver("stop")
-        print(f"{moodle_old} found. Moving moodle to {moodle_new} and replacing it with {moodle_old}.")
-        shutil.move(moodle, moodle_new)
-        shutil.move(moodle_old, moodle)
-        restart_webserver("start")
+        moodle_to_deactivate = moodle_new
+        moodle_to_activate = moodle_old
     elif os.path.exists(moodle_new):
-        restart_webserver("stop")
-        print(f"{moodle_new} found. Moving moodle to {moodle_old} and replacing it with {moodle_new}.")
-        shutil.move(moodle, moodle_old)
-        shutil.move(moodle_new, moodle)
-        restart_webserver("start")
+        moodle_to_deactivate = moodle_old
+        moodle_to_activate = moodle_new
     else:
-        print(f"Neither {moodle_old} nor {moodle_new} exists. Nothing to do.")
+        print(f"Neither {moodle_old} nor {moodle_new} exists. Nothing to do")
+    if os.path.exists(moodle_old) or os.path.exists(moodle_new):
+        restart_webserver("stop")
+        print(f"{moodle_to_activate} found. Moving {moodle} to {moodle_to_deactivate} and replacing it with {moodle_to_activate}")
+        shutil.move(moodle, moodle_to_deactivate)
+        shutil.move(moodle_to_activate, moodle)
+        restart_webserver("start")
+        print(f"Operation completed. {moodle_to_activate} activated")
 except Exception as e:
     print(f"Error while moving directories: {e}")
     exit(1)
-
-print("Operation completed.")
