@@ -1,6 +1,12 @@
 import os
 import subprocess
 import shutil
+import sys
+
+# Exit script if root permissions are missing 
+if os.geteuid() != 0:
+    print(f"This script must be run as root. Use 'sudo python3 {__file__}'")
+    sys.exit(1)
 
 # Define paths
 base_path = "/var/www/"

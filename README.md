@@ -36,7 +36,7 @@ If neither exists, nothing is done.
 - Debian
 - python3
 - apache2
-- Root privileges (`sudo`)
+- Root privileges (`sudo`) - the script checks and exits if not run as root
 - The script must be executed on the system hosting the Moodle files
 
 ---
