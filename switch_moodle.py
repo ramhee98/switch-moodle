@@ -28,9 +28,10 @@ def restart_webserver(action):
         print(f"Attempting to {action} the {webserver} service.")
         run_command(["systemctl", action, webserver])
 
-# Define config files
-config_file = "config.ini"
-template_file = "config_template.ini"
+# Define config files with base path relative to script location
+script_dir = os.path.dirname(os.path.realpath(__file__))
+config_file = os.path.join(script_dir, "config.ini")
+template_file = os.path.join(script_dir, "config_template.ini")
 
 # Determine the original user (not root)
 original_uid = int(os.environ.get("SUDO_UID", os.getuid()))
